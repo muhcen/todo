@@ -20,7 +20,7 @@ export class UserSignupSaga {
         return of(event).pipe(
           delay(1000),
           mergeMap(() => {
-            if (Math.random() > 0.8)
+            if (Math.random() > 0.9)
               return throwError({ message: 'CRM registration failed', event });
 
             console.log(

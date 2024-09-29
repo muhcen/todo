@@ -12,6 +12,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthenticationService } from './application/services/authentication.service';
 import { UserSignedUpListener } from './application/listeners/user-signed-up.listener';
 import { UserSignupSaga } from './application/sagas/user-signup.saga';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './application/strategies/jwt.strategy';
+import { JwtAuthGuard } from './application/guard/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -21,6 +24,7 @@ import { UserSignupSaga } from './application/sagas/user-signup.saga';
       secret: 'SecretKey',
       signOptions: { expiresIn: '1y' },
     }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [UsersController, AuthController],
   providers: [
@@ -30,6 +34,10 @@ import { UserSignupSaga } from './application/sagas/user-signup.saga';
     AuthenticationService,
     UserSignedUpListener,
     UserSignupSaga,
+    JwtStrategy,
+    JwtAuthGuard,
   ],
+
+  exports: [JwtAuthGuard],
 })
 export class UsersModule {}

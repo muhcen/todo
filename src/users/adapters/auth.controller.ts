@@ -6,11 +6,19 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserDto } from '../application/dto/create-user.dto';
 import { SignupUserCommand } from '../application/commands/signup-user.command';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from '../application/guard/jwt-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
