@@ -1,4 +1,5 @@
 import { User } from 'src/users/domain/user.entity';
+import { UserCommandModel } from 'src/users/infrastructure/models/user-command.model';
 
 export class UserDto {
   id: string;
@@ -6,9 +7,9 @@ export class UserDto {
   createdAt: Date;
   updatedAt: Date;
 
-  static fromDomain(user: User): UserDto {
+  static fromDomain(user: UserCommandModel): UserDto {
     return {
-      id: user.id?.toString(),
+      id: user._id?.toString(),
       username: user.username,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,

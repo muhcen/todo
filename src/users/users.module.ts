@@ -10,6 +10,8 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { UserQueryRepository } from './infrastructure/repositories/user-query.repository';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthenticationService } from './application/services/authentication.service';
+import { UserSignedUpListener } from './application/listeners/user-signed-up.listener';
+import { UserSignupSaga } from './application/sagas/user-signup.saga';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { AuthenticationService } from './application/services/authentication.ser
     UserCommandRepository,
     UserQueryRepository,
     AuthenticationService,
+    UserSignedUpListener,
+    UserSignupSaga,
   ],
 })
 export class UsersModule {}

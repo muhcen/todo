@@ -13,8 +13,11 @@ export class UserCommandRepository implements UserCommandRepositoryInterface {
     @InjectRepository(UserCommandModel)
     private readonly userCommandRepository: MongoRepository<UserCommandModel>,
   ) {}
+  async deleteById(userId: string): Promise<void> {
+    await this.userCommandRepository.delete(userId);
+  }
 
-  async save(user: User): Promise<User> {
+  async save(user: User): Promise<UserCommandModel> {
     const userEntity = this.userCommandRepository.create({
       username: user.username,
       password: user.password,
@@ -24,12 +27,6 @@ export class UserCommandRepository implements UserCommandRepositoryInterface {
 
     const savedUser = await this.userCommandRepository.save(userEntity);
 
-    return new User(
-      savedUser._id,
-      savedUser.username,
-      savedUser.password,
-      savedUser.createdAt,
-      savedUser.updatedAt,
-    );
+    return savedUser;
   }
 }
