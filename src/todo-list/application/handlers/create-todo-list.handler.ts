@@ -32,7 +32,12 @@ export class CreateTodoListHandler
       user,
     );
 
-    await this.userCommandRepository.updateTodoList(user, savedTodoList._id);
+    const userTodoLists = [...user.todoLists, savedTodoList._id];
+    await this.userCommandRepository.updateTodoList(
+      user._id.toString(),
+      userTodoLists,
+    );
+
     return savedTodoList;
   }
 }

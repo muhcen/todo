@@ -32,10 +32,10 @@ export class UserCommandRepository implements UserCommandRepositoryInterface {
     return savedUser;
   }
 
-  updateTodoList(user: UserQueryModel, todoListId: ObjectId) {
+  updateTodoList(userId: string, todoListIds: ObjectId[]) {
     return this.userCommandRepository.updateOne(
-      { _id: user._id },
-      { $set: { todoLists: [...user.todoLists, todoListId] } }, // Use the $push operator to append to the array
+      { _id: new ObjectId(userId) },
+      { $set: { todoLists: todoListIds } },
     );
   }
 }

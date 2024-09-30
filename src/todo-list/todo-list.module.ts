@@ -5,8 +5,9 @@ import { TodoListCommandRepository } from './infrastructure/repositories/todo-li
 import { TodoListsController } from './adapters/todo-list.controller';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreateTodoListHandler } from './application/handlers/create-todo-list.handler';
-import { UserQueryRepository } from 'src/users/infrastructure/repositories/user-query.repository';
 import { UsersModule } from 'src/users/users.module';
+import { DeleteTodoListHandler } from './application/handlers/delete-todo-list.handler';
+import { UpdateTodoListHandler } from './application/handlers/update-todo-list.handler';
 
 @Module({
   imports: [
@@ -15,6 +16,11 @@ import { UsersModule } from 'src/users/users.module';
     UsersModule,
   ],
   controllers: [TodoListsController],
-  providers: [TodoListCommandRepository, CreateTodoListHandler],
+  providers: [
+    TodoListCommandRepository,
+    CreateTodoListHandler,
+    DeleteTodoListHandler,
+    UpdateTodoListHandler,
+  ],
 })
 export class TodoListModule {}
