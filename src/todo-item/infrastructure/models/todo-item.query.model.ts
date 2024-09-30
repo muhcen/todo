@@ -1,28 +1,31 @@
+import { ObjectId } from 'mongodb';
 import { TodoListCommandModel } from 'src/todo-list/infrastructure/models/todo-list.command.model';
-import { IUserCommand } from 'src/users/application/interfaces/user-command.interface';
 import {
   Entity,
   Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
   ObjectIdColumn,
-  ObjectId,
-  OneToMany,
 } from 'typeorm';
 
-@Entity('user')
-export class UserCommandModel implements IUserCommand {
+@Entity('todo_items')
+export class TodoItemQueryModel {
   @ObjectIdColumn()
   _id: ObjectId;
 
-  @Column()
-  username: string;
+  @Column({ type: 'varchar', length: 255 })
+  title: string;
 
-  @Column()
-  password: string;
+  @Column({ type: 'text', nullable: true })
+  description: string;
+
+  @Column({ type: 'int', default: 0 })
+  priority: number;
 
   @Column({ type: 'array' })
-  todoLists: ObjectId[] = [];
+  todoList: ObjectId;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

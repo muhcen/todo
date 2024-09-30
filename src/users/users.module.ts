@@ -38,6 +38,6 @@ import { JwtAuthGuard } from './application/guard/jwt-auth.guard';
     JwtAuthGuard,
   ],
 
-  exports: [JwtAuthGuard],
+  exports: [JwtAuthGuard, UserQueryRepository, UserCommandRepository],
 })
 export class UsersModule {}

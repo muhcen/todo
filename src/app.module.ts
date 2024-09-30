@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CqrsModule } from '@nestjs/cqrs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { TodoListModule } from './todo-list/todo-list.module';
+import { TodoItemModule } from './todo-item/todo-item.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       entities: [__dirname + '/**/infrastructure/models/*.model{.ts,.js}'],
     }),
     UsersModule,
+    TodoListModule,
+    TodoItemModule,
     EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],

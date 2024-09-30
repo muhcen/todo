@@ -6,6 +6,8 @@ import { UserCommandModel } from '../models/user-command.model';
 import { User } from 'src/users/domain/user.entity';
 import { ObjectId } from 'mongodb';
 import { UserCommandRepositoryInterface } from 'src/users/domain/repositories/user-command.repository.interface';
+import { TodoListCommandModel } from 'src/todo-list/infrastructure/models/todo-list.command.model';
+import { UserQueryModel } from '../models/user-query.model';
 
 @Injectable()
 export class UserCommandRepository implements UserCommandRepositoryInterface {
@@ -28,5 +30,12 @@ export class UserCommandRepository implements UserCommandRepositoryInterface {
     const savedUser = await this.userCommandRepository.save(userEntity);
 
     return savedUser;
+  }
+
+  updateTodoList(user: UserQueryModel, todoListId: ObjectId) {
+    return this.userCommandRepository.updateOne(
+      { _id: user._id },
+      { $set: { todoLists: [...user.todoLists, todoListId] } }, // Use the $push operator to append to the array
+    );
   }
 }

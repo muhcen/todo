@@ -18,4 +18,10 @@ export class UserQueryRepository implements UserQueryRepositoryInterface {
   findByUsername(username: string): Promise<UserQueryModel> {
     return this.userQueryRepository.findOne({ where: { username } });
   }
+
+  findOneById(userId: string) {
+    return this.userQueryRepository.findOne({
+      where: { _id: new ObjectId(userId) },
+    });
+  }
 }
