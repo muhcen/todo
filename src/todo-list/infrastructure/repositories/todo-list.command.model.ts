@@ -39,10 +39,14 @@ export class TodoListCommandRepository {
       userId: new ObjectId(userId),
     });
   }
-  updateOne(
-    query: { _id: ObjectId; userId: ObjectId },
-    update: { title: string },
-  ) {
+  updateOne(query: object, update: object) {
     return this.todoListCommandRepository.updateOne(query, { $set: update });
+  }
+
+  updateTodoItem(todoListId: ObjectId, todoItemIds: ObjectId[]) {
+    return this.todoListCommandRepository.updateOne(
+      { _id: todoListId },
+      { $set: { todoItems: todoItemIds } },
+    );
   }
 }

@@ -8,19 +8,24 @@ import { CreateTodoListHandler } from './application/handlers/create-todo-list.h
 import { UsersModule } from 'src/users/users.module';
 import { DeleteTodoListHandler } from './application/handlers/delete-todo-list.handler';
 import { UpdateTodoListHandler } from './application/handlers/update-todo-list.handler';
+import { TodoListQueryRepository } from './infrastructure/repositories/todo-list.query.repository';
+import { TodoListQueryModel } from './infrastructure/models/todo-list.query.model';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([TodoListCommandModel]),
+    TypeOrmModule.forFeature([TodoListCommandModel, TodoListQueryModel]),
     CqrsModule,
     UsersModule,
   ],
   controllers: [TodoListsController],
   providers: [
     TodoListCommandRepository,
+    TodoListQueryRepository,
     CreateTodoListHandler,
     DeleteTodoListHandler,
     UpdateTodoListHandler,
   ],
+
+  exports: [TodoListCommandRepository, TodoListQueryRepository],
 })
 export class TodoListModule {}

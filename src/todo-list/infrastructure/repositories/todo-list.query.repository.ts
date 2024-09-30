@@ -18,8 +18,8 @@ export class TodoListQueryRepository {
   findOne(todoListId: ObjectId, userId: ObjectId) {
     return this.todoListQueryRepository.findOne({
       where: {
-        _id: new ObjectId(todoListId),
-        userId: new ObjectId(userId),
+        _id: todoListId,
+        userId: userId,
       },
     });
   }

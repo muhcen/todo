@@ -7,7 +7,7 @@ export class TodoItem {
   private _priority: number;
   private _createdAt: Date;
   private _updatedAt: Date;
-
+  private _todoListId: ObjectId;
   private constructor(
     id: ObjectId | null,
     title: string,
@@ -15,6 +15,7 @@ export class TodoItem {
     priority: number,
     createdAt: Date,
     updatedAt: Date,
+    todoListId: ObjectId,
   ) {
     this._id = id;
     this._title = title;
@@ -22,19 +23,27 @@ export class TodoItem {
     this._priority = priority;
     this._createdAt = createdAt;
     this._updatedAt = updatedAt;
+    this._todoListId = todoListId;
   }
 
-  // Static factory method for creating a new TodoItem
   static create(
     title: string,
     description: string,
     priority: number,
+    todoListId: ObjectId,
   ): TodoItem {
     const now = new Date();
-    return new TodoItem(null, title, description, priority, now, now);
+    return new TodoItem(
+      null,
+      title,
+      description,
+      priority,
+      now,
+      now,
+      todoListId,
+    );
   }
 
-  // Getters
   get id(): ObjectId | null {
     return this._id;
   }
@@ -59,7 +68,9 @@ export class TodoItem {
     return this._updatedAt;
   }
 
-  // Update priority of the TodoItem
+  get todoListId(): ObjectId {
+    return this._todoListId;
+  }
   updatePriority(newPriority: number): void {
     this._priority = newPriority;
     this._updatedAt = new Date();

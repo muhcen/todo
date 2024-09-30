@@ -25,7 +25,7 @@ export class TodoItemCommandModel {
   priority: number;
 
   @Column({ type: 'array' })
-  todoList: ObjectId;
+  todoListId: ObjectId;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
