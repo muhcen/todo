@@ -24,7 +24,7 @@ import { CreateTodoListCommand } from '../application/commands/create-todo-list.
 import { DeleteTodoListCommand } from '../application/commands/delete-todo-list.command';
 import { UpdateTodoListDto } from '../application/dto/update-todo-list.dto';
 import { UpdateTodoListCommand } from '../application/commands/update-todo-list-title.command';
-import { GetTodoListByIdQuery } from '../application/commands/get-todo-list-by-id.query';
+import { GetTodoListByIdQuery } from '../application/queries/get-todo-list-by-id.query';
 
 @ApiBearerAuth()
 @ApiTags('todo-lists')

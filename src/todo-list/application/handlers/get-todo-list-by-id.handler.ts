@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ObjectId } from 'mongodb';
 import { TodoListQueryRepository } from 'src/todo-list/infrastructure/repositories/todo-list.query.repository';
-import { GetTodoListByIdQuery } from '../commands/get-todo-list-by-id.query';
+import { GetTodoListByIdQuery } from '../queries/get-todo-list-by-id.query';
 import { NotFoundException } from '@nestjs/common';
 import { TodoItemQueryRepository } from 'src/todo-item/infrastructure/repositories/todo-item.query.repository';
 import { TodoList } from 'src/todo-list/domain/todo-list.entity';
