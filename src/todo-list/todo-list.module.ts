@@ -12,6 +12,9 @@ import { TodoListQueryRepository } from './infrastructure/repositories/todo-list
 import { TodoListQueryModel } from './infrastructure/models/todo-list.query.model';
 import { GetTodoListByIdHandler } from './application/handlers/get-todo-list-by-id.handler';
 import { TodoItemModule } from 'src/todo-item/todo-item.module';
+import { CreateTodoListSaga } from './application/sagas/create-todo-list.saga';
+import { LogTodoListCreationHandler } from './application/handlers/log-todo-list-creation.handler';
+import { SendNotificationHandler } from './application/handlers/send-notification.handler';
 
 @Module({
   imports: [
@@ -28,6 +31,9 @@ import { TodoItemModule } from 'src/todo-item/todo-item.module';
     DeleteTodoListHandler,
     UpdateTodoListHandler,
     GetTodoListByIdHandler,
+    CreateTodoListSaga,
+    LogTodoListCreationHandler,
+    SendNotificationHandler,
   ],
 
   exports: [TodoListCommandRepository, TodoListQueryRepository],

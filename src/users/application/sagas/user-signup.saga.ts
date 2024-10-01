@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Saga } from '@nestjs/cqrs';
 import { ofType } from '@nestjs/cqrs';
 import { UserSignedUpEvent } from '../events/user-signed-up.event';
-import { delay, mergeMap, catchError } from 'rxjs/operators';
 import { Observable, of, throwError } from 'rxjs';
+import { concatMap, catchError, delay } from 'rxjs/operators';
 import { UserCommandRepository } from 'src/users/infrastructure/repositories/user-command.repository';
 
 @Injectable()
@@ -14,14 +14,16 @@ export class UserSignupSaga {
   userSignupSaga = (events$: Observable<any>): Observable<any> => {
     return events$.pipe(
       ofType(UserSignedUpEvent),
-      mergeMap((event: UserSignedUpEvent) => {
+      concatMap((event: UserSignedUpEvent) => {
         console.log(`Saga triggered for user: ${event.username}`);
 
         return of(event).pipe(
           delay(1000),
-          mergeMap(() => {
-            if (Math.random() > 0.9)
-              return throwError({ message: 'CRM registration failed', event });
+          concatMap(() => {
+            // if (Math.random() > 0.9) {
+            //   console.log(`CRM registration failed for user ${event.username}`);
+            //   throw Error('CRM registration failed');
+            // }
 
             console.log(
               `Successfully registered ${event.username} in the CRM system`,
@@ -30,22 +32,20 @@ export class UserSignupSaga {
           }),
         );
       }),
-      catchError((error: any) => {
+      catchError(async (error: any) => {
         console.log(`Error during saga execution: ${error.message}`);
-
         const event = error.event;
+
         if (!event) {
+          console.log('Event data missing during rollback');
           return of(null);
         }
 
-        return of(null).pipe(
-          mergeMap(async () => {
-            console.log(`Rolling back user signup for userId ${event.userId}`);
-            await this.userCommandRepository.deleteById(event.userId);
-            console.log(`Rollback complete for user ${event.username}`);
-            return of({ type: 'CompensateUserSignupError', error });
-          }),
-        );
+        console.log(`Rolling back user signup for userId ${event.userId}`);
+        await this.userCommandRepository.deleteById(event.userId);
+        console.log(`Rollback complete for user ${event.username}`);
+
+        return of({ type: 'CompensateUserSignupError', error });
       }),
     );
   };

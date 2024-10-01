@@ -10,7 +10,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { UserQueryRepository } from './infrastructure/repositories/user-query.repository';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthenticationService } from './application/services/authentication.service';
-import { UserSignedUpListener } from './application/listeners/user-signed-up.listener';
+// import { UserSignedUpListener } from './application/listeners/user-signed-up.listener';
 import { UserSignupSaga } from './application/sagas/user-signup.saga';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './application/strategies/jwt.strategy';
@@ -32,7 +32,7 @@ import { JwtAuthGuard } from './application/guard/jwt-auth.guard';
     UserCommandRepository,
     UserQueryRepository,
     AuthenticationService,
-    UserSignedUpListener,
+    // UserSignedUpListener,
     UserSignupSaga,
     JwtStrategy,
     JwtAuthGuard,

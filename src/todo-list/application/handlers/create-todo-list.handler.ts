@@ -1,4 +1,4 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { CreateTodoListCommand } from '../commands/create-todo-list.command';
 import { TodoListCommandRepository } from 'src/todo-list/infrastructure/repositories/todo-list.command.model';
 import { TodoList } from 'src/todo-list/domain/todo-list.entity';
@@ -6,6 +6,7 @@ import { TodoListCommandModel } from 'src/todo-list/infrastructure/models/todo-l
 import { UserQueryRepository } from 'src/users/infrastructure/repositories/user-query.repository';
 import { NotFoundException } from '@nestjs/common';
 import { UserCommandRepository } from 'src/users/infrastructure/repositories/user-command.repository';
+import { TodoListCreatedEvent } from '../events/todo-list-created.event';
 
 @CommandHandler(CreateTodoListCommand)
 export class CreateTodoListHandler
@@ -15,6 +16,7 @@ export class CreateTodoListHandler
     private readonly todoListCommandRepository: TodoListCommandRepository,
     private readonly userQueryRepository: UserQueryRepository,
     private readonly userCommandRepository: UserCommandRepository,
+    private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateTodoListCommand): Promise<TodoListCommandModel> {
@@ -36,6 +38,10 @@ export class CreateTodoListHandler
     await this.userCommandRepository.updateTodoList(
       user._id.toString(),
       userTodoLists,
+    );
+
+    this.eventBus.publish(
+      new TodoListCreatedEvent(savedTodoList._id.toString(), userId),
     );
 
     return savedTodoList;
