@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TodoListCommandModel } from './infrastructure/models/todo-list.command.model';
 import { TodoListCommandRepository } from './infrastructure/repositories/todo-list.command.model';
@@ -10,12 +10,15 @@ import { DeleteTodoListHandler } from './application/handlers/delete-todo-list.h
 import { UpdateTodoListHandler } from './application/handlers/update-todo-list.handler';
 import { TodoListQueryRepository } from './infrastructure/repositories/todo-list.query.repository';
 import { TodoListQueryModel } from './infrastructure/models/todo-list.query.model';
+import { GetTodoListByIdHandler } from './application/handlers/get-todo-list-by-id.handler';
+import { TodoItemModule } from 'src/todo-item/todo-item.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([TodoListCommandModel, TodoListQueryModel]),
     CqrsModule,
     UsersModule,
+    forwardRef(() => TodoItemModule),
   ],
   controllers: [TodoListsController],
   providers: [
@@ -24,6 +27,7 @@ import { TodoListQueryModel } from './infrastructure/models/todo-list.query.mode
     CreateTodoListHandler,
     DeleteTodoListHandler,
     UpdateTodoListHandler,
+    GetTodoListByIdHandler,
   ],
 
   exports: [TodoListCommandRepository, TodoListQueryRepository],

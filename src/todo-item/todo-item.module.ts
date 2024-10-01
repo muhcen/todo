@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TodoItemCommandModel } from './infrastructure/models/todo-item.command.model';
 import { TodoItemCommandRepository } from './infrastructure/repositories/todo-item.command.repository';
@@ -8,12 +8,14 @@ import { AddTodoItemHandler } from './application/handlers/add-todo-item.handler
 import { TodoListModule } from 'src/todo-list/todo-list.module';
 import { DeleteTodoItemHandler } from './application/handlers/delete-todo-item.handler';
 import { UpdateTodoItemHandler } from './application/handlers/update-todo-item.handler';
+import { TodoItemQueryModel } from './infrastructure/models/todo-item.query.model';
+import { TodoItemQueryRepository } from './infrastructure/repositories/todo-item.query.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([TodoItemCommandModel]),
+    TypeOrmModule.forFeature([TodoItemCommandModel, TodoItemQueryModel]),
     CqrsModule,
-    TodoListModule,
+    forwardRef(() => TodoListModule),
   ],
   controllers: [TodoItemController],
   providers: [
@@ -21,6 +23,9 @@ import { UpdateTodoItemHandler } from './application/handlers/update-todo-item.h
     AddTodoItemHandler,
     DeleteTodoItemHandler,
     UpdateTodoItemHandler,
+    TodoItemQueryRepository,
   ],
+
+  exports: [TodoItemQueryRepository],
 })
 export class TodoItemModule {}

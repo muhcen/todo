@@ -1,19 +1,20 @@
 import { ObjectId } from 'mongodb';
 import { TodoItem } from 'src/todo-item/domain/todo-item.entity';
+import { TodoItemQueryModel } from 'src/todo-item/infrastructure/models/todo-item.query.model';
 
 export class TodoList {
   private _id: ObjectId | null;
   private _title: string;
   private _userId: string;
-  private _todoItems: TodoItem[] = [];
+  private _todoItems: TodoItemQueryModel[] = [];
   private _createdAt: Date;
   private _updatedAt: Date;
 
-  private constructor(
+  constructor(
     id: ObjectId | null,
     title: string,
     userId: string,
-    todoItems: TodoItem[],
+    todoItems: TodoItemQueryModel[],
     createdAt: Date,
     updatedAt: Date,
   ) {
@@ -42,7 +43,7 @@ export class TodoList {
     return this._userId;
   }
 
-  get todoItems(): TodoItem[] {
+  get todoItems(): TodoItemQueryModel[] {
     return this._todoItems;
   }
 
@@ -54,29 +55,7 @@ export class TodoList {
     return this._updatedAt;
   }
 
-  updateTitle(newTitle: string): void {
-    if (newTitle.length === 0 || newTitle.length > 255) {
-      throw new Error('The title must be between 1 and 255 characters.');
-    }
-    this._title = newTitle;
-    this._updatedAt = new Date();
-  }
-
-  addTodoItem(todoItem: TodoItem): void {
-    this._todoItems.push(todoItem);
-    this._updatedAt = new Date();
-  }
-
-  removeTodoItem(todoItemId: ObjectId): void {
-    this._todoItems = this._todoItems.filter((item) => item.id !== todoItemId);
-    this._updatedAt = new Date();
-  }
-
-  findTodoItem(todoItemId: ObjectId): TodoItem | undefined {
-    return this._todoItems.find((item) => item.id === todoItemId);
-  }
-
-  touch(): void {
-    this._updatedAt = new Date();
+  sortItemsByPriority(): void {
+    this.todoItems.sort((a, b) => a.priority - b.priority);
   }
 }

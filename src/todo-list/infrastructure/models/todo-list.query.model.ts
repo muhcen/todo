@@ -2,14 +2,10 @@ import { ObjectId } from 'mongodb';
 import {
   Entity,
   Column,
-  OneToMany,
-  ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
   ObjectIdColumn,
 } from 'typeorm';
-import { TodoItemQueryModel } from 'src/todo-item/infrastructure/models/todo-item.query.model';
-import { UserQueryModel } from 'src/users/infrastructure/models/user-query.model';
 
 @Entity('todo_lists')
 export class TodoListQueryModel {
@@ -20,7 +16,7 @@ export class TodoListQueryModel {
   title: string;
 
   @Column()
-  user: ObjectId;
+  userId: ObjectId;
 
   @Column({ type: 'array' })
   todoItems: ObjectId[] = [];

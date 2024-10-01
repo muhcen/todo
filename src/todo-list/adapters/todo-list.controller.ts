@@ -13,23 +13,28 @@ import {
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/users/application/guard/jwt-auth.guard';
 import { CreateTodoListDto } from '../application/dto/create-todo-list.dto';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateTodoListCommand } from '../application/commands/create-todo-list.command';
 import { DeleteTodoListCommand } from '../application/commands/delete-todo-list.command';
 import { UpdateTodoListDto } from '../application/dto/update-todo-list.dto';
 import { UpdateTodoListCommand } from '../application/commands/update-todo-list-title.command';
+import { GetTodoListByIdQuery } from '../application/commands/get-todo-list-by-id.query';
 
 @ApiBearerAuth()
 @ApiTags('todo-lists')
 @Controller('todo-lists')
 @UseGuards(JwtAuthGuard)
 export class TodoListsController {
-  constructor(private readonly commandBus: CommandBus) {}
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
+  ) {}
 
   @ApiOperation({ summary: 'Create a new Todo List' })
   @ApiResponse({ status: 201, description: 'Todo List created successfully.' })
@@ -74,5 +79,26 @@ export class TodoListsController {
     return this.commandBus.execute(
       new UpdateTodoListCommand(id, userId, title),
     );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get(':todoListId')
+  @ApiOperation({
+    summary: 'Get a Todo List by ID with items sorted by priority',
+  })
+  @ApiResponse({ status: 200, description: 'Todo List fetched successfully.' })
+  @ApiResponse({ status: 404, description: 'Todo List not found.' })
+  @ApiParam({
+    name: 'todoListId',
+    description: 'The ID of the Todo List to fetch',
+    example: '615c3415e9b7a8a1e8f643a7',
+  })
+  async getTodoListById(
+    @Param('todoListId') todoListId: string,
+    @Req() req: any,
+  ): Promise<any> {
+    const userId = req.user.userId;
+    return this.queryBus.execute(new GetTodoListByIdQuery(todoListId, userId));
   }
 }
