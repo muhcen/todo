@@ -23,6 +23,8 @@ import { CreateTodoItemDto } from '../application/dto/create-todo-item.dto';
 import { CreateTodoItemCommand } from '../application/commands/add-todo-item.command';
 import { CommandBus } from '@nestjs/cqrs';
 import { DeleteTodoItemCommand } from '../application/commands/delete-todo-item.command';
+import { UpdateTodoItemCommand } from '../application/commands/update-todo-item.command';
+import { UpdateTodoItemDto } from '../application/dto/update-todo-item.dto';
 
 @ApiBearerAuth()
 @ApiTags('todo-items')
@@ -82,6 +84,40 @@ export class TodoItemController {
 
     return this.commandBus.execute(
       new DeleteTodoItemCommand(todoListId, todoItemId, userId),
+    );
+  }
+
+  @ApiOperation({ summary: 'Update a Todo Item in a Todo List' })
+  @ApiResponse({ status: 200, description: 'Todo Item successfully updated.' })
+  @ApiResponse({ status: 404, description: 'Todo Item not found.' })
+  @ApiQuery({
+    name: 'todoListId',
+    description: 'The ID of the Todo List containing the Todo Item',
+    example: '615c3415e9b7a8a1e8f643a7',
+  })
+  @ApiParam({
+    name: 'todoItemId',
+    description: 'The ID of the Todo Item to be updated',
+    example: '615c3415e9b7a8a1e8f643a8',
+  })
+  @Patch('/:todoItemId')
+  async updateTodoItem(
+    @Query('todoListId') todoListId: string,
+    @Param('todoItemId') todoItemId: string,
+    @Body() updateTodoItemDto: UpdateTodoItemDto,
+    @Req() req: any,
+  ): Promise<void> {
+    const userId = req.user.userId;
+    const { title, description, priority } = updateTodoItemDto;
+    return this.commandBus.execute(
+      new UpdateTodoItemCommand(
+        todoListId,
+        todoItemId,
+        userId,
+        title,
+        description,
+        priority,
+      ),
     );
   }
 }

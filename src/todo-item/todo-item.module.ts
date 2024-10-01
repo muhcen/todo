@@ -7,6 +7,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { AddTodoItemHandler } from './application/handlers/add-todo-item.handler';
 import { TodoListModule } from 'src/todo-list/todo-list.module';
 import { DeleteTodoItemHandler } from './application/handlers/delete-todo-item.handler';
+import { UpdateTodoItemHandler } from './application/handlers/update-todo-item.handler';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { DeleteTodoItemHandler } from './application/handlers/delete-todo-item.h
     TodoItemCommandRepository,
     AddTodoItemHandler,
     DeleteTodoItemHandler,
+    UpdateTodoItemHandler,
   ],
 })
 export class TodoItemModule {}

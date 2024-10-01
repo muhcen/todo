@@ -36,4 +36,8 @@ export class TodoItemCommandRepository {
       _id: todoItemId,
     });
   }
+
+  updateOne(query: object, update: object) {
+    return this.todoItemCommandRepository.updateOne(query, { $set: update });
+  }
 }
